@@ -1,0 +1,26 @@
+{
+  "name": "Soapkeeper",
+  "description": "Keeps soap state!",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.soap2day.ac/*",
+        "https://*.soap2day.to/*",
+        "https://*.soap2day.sh/*",
+        "https://*.soap2day.cx/*",
+        "https://*.s2dfree.to/*",
+        "https://*.s2dfree.cc/*",
+        "https://*.s2dfree.de/*",
+        "https://*.s2dfree.is/*",
+        "https://*.s2dfree.nl/*"
+      ],
+      "js": ["soapkeeper.js"]
+    }
+  ],
+  "permissions": ["storage", "activeTab"]
+}
