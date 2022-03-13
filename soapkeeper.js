@@ -53,7 +53,7 @@ async function createRecentSeriesInjection() {
   const innerBodyDiv = document.createElement("div");
   innerBodyDiv.classList.add("col-sm-12", "col-lg-12", "no-padding");
 
-  const recentSeries = await chrome.storage.sync.get("recentSeries");
+  const recentSeries = await chrome.storage.local.get("recentSeries");
 
   for (const series of recentSeries.recentSeries) {
     const elementDiv = document.createElement("div");
@@ -72,7 +72,9 @@ async function createRecentSeriesInjection() {
     const titleDiv = document.createElement("div");
     titleDiv.style = "height:40px;overflow: hidden; text-overflow: ellipsis;";
     const titleH5 = document.createElement("h5");
-    titleH5.appendChild(document.createTextNode(series.title + " " + series.se_ep));
+    titleH5.appendChild(
+      document.createTextNode(series.title + " " + series.se_ep)
+    );
     titleDiv.appendChild(titleH5);
     thumbnailDiv.appendChild(titleDiv);
     link.appendChild(thumbnailDiv);
@@ -99,7 +101,7 @@ async function createRecentMoviesInjection() {
   const innerBodyDiv = document.createElement("div");
   innerBodyDiv.classList.add("col-sm-12", "col-lg-12", "no-padding");
 
-  const recentMovies = await chrome.storage.sync.get("recentMovies");
+  const recentMovies = await chrome.storage.local.get("recentMovies");
 
   for (const movie of recentMovies.recentMovies) {
     const elementDiv = document.createElement("div");
@@ -142,7 +144,7 @@ async function storeSoap() {
   const indexOfTitle = moviesOrSeriesInfo.textContent.lastIndexOf(">>") + 2;
   const title = moviesOrSeriesInfo.textContent.substring(indexOfTitle).trim();
   CURRENT_SOAP = { type: type, title: title };
-  const storedSoaps = await chrome.storage.sync
+  const storedSoaps = await chrome.storage.local
     .get("soaps")
     .then((res) => res.soaps);
   if (storedSoaps[type][title] !== undefined) {
@@ -155,17 +157,17 @@ async function storeSoap() {
   }
   storedSoaps[type][title] = { thumbnail: thumbnail.outerHTML };
 
-  await chrome.storage.sync.set({ soaps: storedSoaps });
+  await chrome.storage.local.set({ soaps: storedSoaps });
 }
 
 async function storeMovieState(timeElapsed, duration) {
-  const soaps = await chrome.storage.sync.get("soaps").then((s) => s.soaps);
+  const soaps = await chrome.storage.local.get("soaps").then((s) => s.soaps);
   soaps["Movies"][CURRENT_SOAP.title].timeElapsed = timeElapsed;
   soaps["Movies"][CURRENT_SOAP.title].duration = duration;
   soaps["Movies"][CURRENT_SOAP.title].href = window.location.href;
-  await chrome.storage.sync.set({ soaps: soaps });
+  await chrome.storage.local.set({ soaps: soaps });
 
-  const recentMovies = await chrome.storage.sync
+  const recentMovies = await chrome.storage.local
     .get("recentMovies")
     .then((res) => res.recentMovies);
   const movieAlreadyRecentIndex = recentMovies.findIndex(
@@ -179,11 +181,11 @@ async function storeMovieState(timeElapsed, duration) {
   } else if (recentMovies.length > 10) {
     recentMovies.shift();
   }
-  await chrome.storage.sync.set({ recentMovies: recentMovies });
+  await chrome.storage.local.set({ recentMovies: recentMovies });
 }
 
 async function storeSeriesState(timeElapsed, duration) {
-  const soaps = await chrome.storage.sync.get("soaps").then((s) => s.soaps);
+  const soaps = await chrome.storage.local.get("soaps").then((s) => s.soaps);
   CURRENT_SOAP = {
     title: document
       .getElementsByClassName("alert alert-info")[0]
@@ -197,9 +199,9 @@ async function storeSeriesState(timeElapsed, duration) {
     .getElementsByClassName("player-title-bar text-center")[0]
     .textContent.replace("\n", "")
     .trim();
-  await chrome.storage.sync.set({ soaps: soaps });
+  await chrome.storage.local.set({ soaps: soaps });
 
-  const recentSeries = await chrome.storage.sync
+  const recentSeries = await chrome.storage.local
     .get("recentSeries")
     .then((res) => res.recentSeries);
 
@@ -216,7 +218,7 @@ async function storeSeriesState(timeElapsed, duration) {
     recentSeries.shift();
   }
   console.log(recentSeries);
-  await chrome.storage.sync.set({ recentSeries: recentSeries });
+  await chrome.storage.local.set({ recentSeries: recentSeries });
 }
 
 async function storeSoapState() {

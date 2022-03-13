@@ -2,9 +2,9 @@
   "name": "Soapkeeper",
   "description": "Keeps soap state!",
   "version": "1.0",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
