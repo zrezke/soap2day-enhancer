@@ -54,8 +54,7 @@ async function createRecentSeriesInjection() {
   innerBodyDiv.classList.add("col-sm-12", "col-lg-12", "no-padding");
 
   const recentSeries = await chrome.storage.sync.get("recentSeries");
-
-  for (const series of recentSeries.recentSeries) {
+  for (const series of recentSeries.recentSeries.reverse()) {
     const elementDiv = document.createElement("div");
     elementDiv.classList.add(
       "col-lg-2",
@@ -101,7 +100,7 @@ async function createRecentMoviesInjection() {
 
   const recentMovies = await chrome.storage.sync.get("recentMovies");
 
-  for (const movie of recentMovies.recentMovies) {
+  for (const movie of recentMovies.recentMovies.reverse()) {
     const elementDiv = document.createElement("div");
     elementDiv.classList.add(
       "col-lg-2",
